@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEBI Penalty Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #003399;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    main {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #003399;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #001f66;
+    }
+    .result {
+      margin-top: 20px;
+      background: #e6f0ff;
+      padding: 15px;
+      border-radius: 6px;
+      font-size: 18px;
+      text-align: center;
+    }
+    footer {
+      text-align: center;
+      margin: 30px 0;
+      color: #555;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SEBI Penalty Calculator</h1>
+  </header>
+
+  <main>
+    <h2>Calculate Penalty Amount</h2>
+    <form id="penaltyForm">
+      <label for="violationType">Select Violation Type:</label>
+      <select id="violationType" required>
+        <option value="">-- Select --</option>
+        <option value="insider">Insider Trading</option>
+        <option value="non_disclosure">Non-disclosure / Delay</option>
+        <option value="misreporting">Misreporting</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="amount">Transaction Amount (INR):</label>
+      <input type="number" id="amount" placeholder="Enter amount involved" required />
+
+      <label for="days">Delay in Days (if applicable):</label>
+      <input type="number" id="days" placeholder="Enter number of days" value="0" />
+
+      <label for="severity">Severity Level:</label>
+      <select id="severity" required>
+        <option value="1">1 - Low</option>
+        <option value="2">2 - Moderate</option>
+        <option value="3">3 - High</option>
+      </select>
+
+      <button type="button" onclick="calculatePenalty()">Calculate Penalty</button>
+    </form>
+
+    <div class="result" id="resultBox" style="display:none;">
+      <strong>Estimated Penalty:</strong> ₹<span id="penaltyAmount"></span>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 SEBI Penalty Calculator (Template) | For educational/demo use only
+  </footer>
+
+  <script>
+    function calculatePenalty() {
+      const type = document.getElementById("violationType").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const days = parseInt(document.getElementById("days").value);
+      const severity = parseInt(document.getElementById("severity").value);
+      const resultBox = document.getElementById("resultBox");
+      const penaltyField = document.getElementById("penaltyAmount");
+
+      if (!type || isNaN(amount)) {
+        alert("Please fill in all fields correctly.");
+        return;
+      }
+
+      let penalty = 0;
+
+      // Example rule set (editable)
+      switch (type) {
+        case "insider":
+          penalty = amount * (0.1 * severity); // 10% × severity
+          break;
+        case "non_disclosure":
+          penalty = days * 2000 * severity; // ₹2000/day × severity
+          break;
+        case "misreporting":
+          penalty = 50000 * severity; // ₹50,000 × severity
+          break;
+        default:
+          penalty = amount * 0.02 * severity; // 2% × severity
+      }
+
+      // Apply maximum cap (example)
+      if (penalty > 25000000) penalty = 25000000;
+
+      // Display result
+      penaltyField.textContent = penalty.toLocaleString("en-IN");
+      resultBox.style.display = "block";
+    }
+  </script>
+</body>
+</html>
